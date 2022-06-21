@@ -15,16 +15,6 @@ router.get('/viewuser', async (req, res) => {
     }
 })
 
-// router.post('/updatealien/:id', async (req, res) => {
-
-//     try {
-//         const alien = await Alien.findByIdAndUpdate(req.params.id)
-//         res.render('./viewuser', { data: alien })
-//         res.send("Updated")
-//     } catch (err) {
-//         res.send('Error ' + err)
-//     }
-// })
 router.post('/update/:id', async (req, res) => {
     try {
         const alien = await Alien.findByIdAndUpdate({ _id:req.params.id },req.body, { new: true })
@@ -44,25 +34,6 @@ router.get('/edit/:id', async (req, res) => {
         res.render('./updateuser', { data })
     })
 });
-
-router.post('/update', async (req, res) => {
-    const alien = new Alien({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        pwd: req.body.pwd,
-        cpwd: req.body.cpwd
-    })
-
-    try {
-        const a1 = await alien.save()
-        // res.json(a1)
-        res.redirect('viewuser')
-        // res.send('data inserted')
-    } catch (err) {
-        res.send('Error')
-    }
-})
 
 
 router.get('/delete/:id', async (req, res) => {
