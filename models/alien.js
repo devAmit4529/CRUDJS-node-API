@@ -2,15 +2,23 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const alienSchema = new schema(
     {
-    name:{
+    first_name:{
         type:String,
         required:true
     },
-    tech:{
+    last_name:{
         type:String,
         required:true
     },
     email:{
+        type:String,
+        required:true
+    },
+    pwd:{
+        type:String,
+        required:true
+    },
+    cpwd:{
         type:String,
         required:true
     }

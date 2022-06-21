@@ -9,9 +9,14 @@
   "author": "Amit4529",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
+    "fs": "^0.0.1-security",
     "mongodb": "^4.7.0",
-    "mongoose": "^6.3.6"
+    "mongoose": "^6.3.6",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.5",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
