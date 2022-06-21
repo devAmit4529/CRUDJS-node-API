@@ -15,13 +15,25 @@ router.get('/viewuser', async (req, res) => {
     }
 })
 
-router.post('/updatealien', async (req, res) => {
+// router.post('/updatealien/:id', async (req, res) => {
 
+//     try {
+//         const alien = await Alien.findByIdAndUpdate(req.params.id)
+//         res.render('./viewuser', { data: alien })
+//         res.send("Updated")
+//     } catch (err) {
+//         res.send('Error ' + err)
+//     }
+// })
+router.post('/update/:id', async (req, res) => {
     try {
-        const alien = await Alien.findByIdAndUpdate(req.params.id)
-        res.render('./viewuser', { data: alien })
+        const alien = await Alien.findByIdAndUpdate({ _id:req.params.id },req.body, { new: true })
+        const a1 = await alien.save()
+        // res.send(a1)
+        res.redirect('../viewuser')
+
     } catch (err) {
-        res.send('Error ' + err)
+        res.send('Error', err)
     }
 })
 
@@ -105,7 +117,7 @@ router.post('/add', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const alien = await Alien.findById(req.params.id)
-        alien.tech = req.body.tech
+        alien.email = req.body.email
         const a1 = await alien.save()
         res.json(a1)
     } catch (err) {
