@@ -63,7 +63,7 @@ router.post('/reset',async (req, res) => {
                     require: true,
                     auth: {
                         user: 'amit.kumar@antiersolutions.com',
-                        pass: 'AmIt@3452#'
+                        pass: ''
                     }
                 })
                 transporter.sendMail(data, function (error, info) {
