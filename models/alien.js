@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const alienSchema = new schema(
@@ -21,6 +22,10 @@ const alienSchema = new schema(
     cpwd:{
         type:String,
         required:true
+    },
+    token:{
+        type:String,
+        default:''
     }
 })
 

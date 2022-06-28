@@ -8,6 +8,9 @@ const bcrypt = require("bcryptjs");
 const url = 'mongodb://localhost/learningMongo'
 const ejs = require('ejs');
 const app = express()
+require("dotenv").config();
+app.use(express.json());
+
 
 mongoose.connect(url, {useNewUrlParser:true})
 const con = mongoose.connection
@@ -79,41 +82,45 @@ app.post('/upload',(req,res)=>{
 //   console.error(err)
 // }
 
-bcrypt.hash("qwertyuiop", 8)
- .then(password => {
-    console.log(password);
-    bcrypt.compare("qwertyuiop", password)
-    .then(isEqual => {
-      console.log(isEqual); // true
-   });
-});
+
+
+// bcrypt.hash("qwertyuiop", 8)
+//  .then(password => {
+//     console.log(password);
+//     bcrypt.compare("qwertyuiop", password)
+//     .then(isEqual => {
+//       console.log(isEqual); // true
+//    });
+// });
  
 
-var transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
-    require: true,
-    auth: {
-        user: 'madisyn.aufderhar96@ethereal.email',
-        pass: 'CkMe3NEvFYT1zwbu4Q'
-    }
-})
-var information = {
-    from: "madisyn.aufderhar96@ethereal.email",
-    to: "maurine.schmeler27@ethereal.email",
-    subject: "testmail",
-    text: "Hello, testing nodemailer!",
-};
-transporter.sendMail(information, function (error, info) {
-    if (error) {
-        console.log(error)
-    }
-    else {
-        console.log("successfully Sent Email", info.response)
-    }
-})
 
-app.listen(4000, () => {
-    console.log('Server started')
-})
+
+
+// var transporter = nodemailer.createTransport({
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     secure: false,
+//     require: true,
+//     auth: {
+//         user: 'madisyn.aufderhar96@ethereal.email',
+//         pass: 'CkMe3NEvFYT1zwbu4Q'
+//     }
+// })
+// var information = {
+//     from: "madisyn.aufderhar96@ethereal.email",
+//     to: "maurine.schmeler27@ethereal.email",
+//     subject: "testmail",
+//     text: "Hello, testing nodemailer!",
+// };
+// transporter.sendMail(information, function (error, info) {
+//     if (error) {
+//         console.log(error)
+//     }
+//     else {
+//         console.log("successfully Sent Email", info.response)
+//     }
+// })
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
