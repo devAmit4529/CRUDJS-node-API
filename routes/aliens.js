@@ -63,8 +63,8 @@ router.post('/reset', async (req, res) => {
                     secure: false,
                     require: true,
                     auth: {
-                        user: '',
-                        pass: ''
+                        user: 'amit.kumar@antiersolutions.com',
+                        pass: 'Amit@3452#'
                     }
                 })
                 transporter.sendMail(data, function (error, info) {
@@ -146,7 +146,8 @@ router.get('/edit/:id', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-    const { email, pwd } = req.body;
+    const email = req.body.email;
+    const pwd = req.body.pwd;
     const user = await Alien.findOne({ email });
     if (user) {
         const verify = await bcrypt.compare(pwd, user.pwd);
@@ -156,13 +157,13 @@ router.post('/login', async (req, res) => {
                 email: user.email,
             }, (60 * 60 * 24));
             console.log("token is", token)
-            res.status(200).send(token)
-            // res.render('./userprofile')
+            // res.status(200).send(token)
+            res.render('./userprofile')
             return ({ success: true, message: 'Login successfully!', });
         }
-        return ({ success: false, message: 'Entered email or password is not valid!', });
-    }
-    return ({ success: false, message: 'user is not registerd!' });
+    res.send("Email or password is not valid") 
+   }
+   res.send("User is not registered")    
 })
 
 router.get('/delete/:id', async (req, res) => {
