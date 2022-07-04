@@ -3,10 +3,11 @@ const router = express.Router()
 const Alien = require('../models/alien')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const nodemailer=require('nodemailer')
+const nodemailer = require('nodemailer')
+const alien = require('../models/alien')
 
 const generateJwt = async (jwtData, expTime) => {
-    const secret=`${process.env.JWT_PRIVATE_KEY}`;
+    const secret = `${process.env.JWT_PRIVATE_KEY}`;
     try {
         return jwt.sign(jwtData, secret, {
             expiresIn: expTime,
@@ -31,7 +32,7 @@ router.get('/forgot', async (req, res) => {
     res.render("forgot");
 })
 
-router.post('/reset',async (req, res) => {
+router.post('/reset', async (req, res) => {
     const { email } = req.body;
     //console.log(email)
 
@@ -41,14 +42,14 @@ router.post('/reset',async (req, res) => {
 
             return res.status(400).json({ error: "user with this email is does not exist" })
         }
-        const ab=`${process.env.RESET_PASSWORD_KEY}`;
+        const ab = `${process.env.RESET_PASSWORD_KEY}`;
         const accessToken = jwt.sign({ id: user._id, email: user.email }, ab, { expiresIn: "5s" });
         console.log(accessToken)
         const data = {
             from: 'amit.kumar@antiersolutions.com',
             to: email,
             subject: "resetlink",
-            html: `${process.env.CLIENT_URL}/resetpassword/${accessToken}`
+            html: `${process.env.CLIENT_URL}/aliens/resetpassword/${accessToken}`
 
         }
         Alien.findOneAndUpdate({ email: user.email }, { $set: { token: accessToken } }, { new: true }, (err, user) => {
@@ -62,7 +63,7 @@ router.post('/reset',async (req, res) => {
                     secure: false,
                     require: true,
                     auth: {
-                        user: 'amit.kumar@antiersolutions.com',
+                        user: '',
                         pass: ''
                     }
                 })
@@ -83,6 +84,38 @@ router.post('/reset',async (req, res) => {
 })
 
 
+router.post('/newpassword',(req,res)=>{
+    const newpassword = req.body.password;
+    console.log('newpassword::::',newpassword);
+    const sentToken = req.body.token;
+    console.log('senttoken::::',sentToken);
+
+    Alien.findOne({token:sentToken,expireToken:{$gt:Date.now()}})
+    .then(alien=>{
+        if(!alien){
+            return res.status(422).json({error:"Try again session expired"})
+        }
+        bcrypt.hash(newpassword,12).then(hashedpassword=>{
+           alien.pwd = hashedpassword
+           alien.cpwd= newpassword
+           console.log("HashedPassword:::::",alien.pwd)
+           alien.token = undefined
+           alien.expireToken = undefined
+           alien.save().then((Alien)=>{
+               res.redirect('./loginuser')
+            //    res.status(201).json({message:"password updated success"})
+           }) 
+        })
+    }).catch(err=>{
+        console.log(err)
+    })
+})
+
+router.get('/resetpassword/:token', async (req, res) => {
+    res.render("resetpassword");
+})
+
+
 
 router.get('/viewuser', async (req, res) => {
     try {
@@ -95,7 +128,7 @@ router.get('/viewuser', async (req, res) => {
 
 router.post('/update/:id', async (req, res) => {
     try {
-        const alien = await Alien.findByIdAndUpdate({ _id:req.params.id },req.body, { new: true })
+        const alien = await Alien.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true })
         const a1 = await alien.save()
         res.redirect('../viewuser')
 
@@ -112,7 +145,7 @@ router.get('/edit/:id', async (req, res) => {
 
 
 
-router.post('/login' , async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, pwd } = req.body;
     const user = await Alien.findOne({ email });
     if (user) {
@@ -121,15 +154,15 @@ router.post('/login' , async (req, res) => {
             const token = await generateJwt({
                 id: user._id,
                 email: user.email,
-            }, (60 *60 *24));
+            }, (60 * 60 * 24));
             console.log("token is", token)
             res.status(200).send(token)
-            res.render('./userprofile')
+            // res.render('./userprofile')
             return ({ success: true, message: 'Login successfully!', });
         }
         return ({ success: false, message: 'Entered email or password is not valid!', });
     }
-    return ({ success: false, message: 'user is not registerd!' }); 
+    return ({ success: false, message: 'user is not registerd!' });
 })
 
 router.get('/delete/:id', async (req, res) => {
