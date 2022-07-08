@@ -19,7 +19,9 @@
 
 <body>
     <section class="vh-100" style="background-color: #f4f5f7;">
+        
         <div class="container py-5 h-100">
+            <% {data} { %>
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-lg-6 mb-4 mb-lg-0">
                     <div class="card mb-3" style="border-radius: .5rem;">
@@ -28,7 +30,8 @@
                                 style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
                                     alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
-                                <h5>Seema Thakur</h5>
+                                
+                                <h5><%= data.first_name %> <%= data.last_name %></h5>
                                 <p>Learning & development</p>
                                 <i class="far fa-edit mb-5"></i>
                             </div>
@@ -39,11 +42,7 @@
                                     <div class="row pt-1">
                                         <div class="col-6 mb-3">
                                             <h6>Email</h6>
-                                            <p class="text-muted">seema.thakur@hotmail.com</p>
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <h6>Phone</h6>
-                                            <p class="text-muted">1234696969</p>
+                                            <p class="text-muted"><%= data.email %></p>
                                         </div>
                                     </div>
                                    
@@ -56,8 +55,11 @@
                     </div>
                 </div>
             </div>
+            <% }; %>
         </div>
+    
     </section>
+
 </body>
 
 </html>

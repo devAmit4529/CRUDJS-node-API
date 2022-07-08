@@ -158,7 +158,8 @@ router.post('/login', async (req, res) => {
             }, (60 * 60 * 24));
             console.log("token is", token)
             // res.status(200).send(token)
-            res.render('./userprofile')
+            res.render('./userprofile', { data: user })
+            console.log("data::",user)
             return ({ success: true, message: 'Login successfully!', });
         }
     res.send("Email or password is not valid") 
